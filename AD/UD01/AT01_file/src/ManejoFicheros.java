@@ -29,12 +29,28 @@ public class ManejoFicheros {
 
     public void borrarDirectorio(String ruta) throws FileNotFoundException {
         File directorio = new File(ruta);
-        if (directorio.isDirectory() && directorio.exists()) {
-            directorio.delete();
-        } else {
-            throw new FileNotFoundException();
+
+        if (!directorio.exists() || !directorio.isDirectory()) {
+            throw new FileNotFoundException("Directorio no encontrado: " + ruta);
         }
 
+        borrarRecursivo(directorio);
+    }
+
+    // Método auxiliar recursivo
+    private void borrarRecursivo(File archivo) {
+        if (archivo.isDirectory()) {
+            File[] contenido = archivo.listFiles();
+            if (contenido != null) {
+                for (File f : contenido) {
+                    borrarRecursivo(f); // Borrar el contenido primero
+                }
+            }
+        }
+        // Luego borrar el archivo o directorio vacío
+        if (!archivo.delete()) {
+            System.out.println("No se pudo borrar: " + archivo.getAbsolutePath());
+        }
     }
 
     public void listarDirectorio(String ruta) throws FileNotFoundException {
@@ -44,7 +60,7 @@ public class ManejoFicheros {
             for (String entry : lista) {
                 System.out.println(entry);
             }
-        }else{
+        } else {
             throw new FileNotFoundException("no se encontro el directorio");
         }
 

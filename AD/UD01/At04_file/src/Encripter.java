@@ -5,8 +5,6 @@ import java.util.Map;
 
 public class Encripter {
 
-    Map <Character,Character> listaCaracteres = new HashMap<>(){
-        
-    };    
+
 
 }

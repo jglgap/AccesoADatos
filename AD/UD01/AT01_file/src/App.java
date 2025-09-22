@@ -13,10 +13,10 @@ public class App {
             //mf.crearDirectorio("zcarpeta");
             //mf.crearFichero("zcarpeta/primerFichero.txt");
             //mf.borrarFichero("fichero.txt");
-            //mf.borrarDirectorio("carpeta");
-            mf.listarDirectorio("zcarpeta");
-            InfoFichero iff = new InfoFichero(file);
-            iff.mostrarInfo();
+            mf.borrarDirectorio("zcarpeta");
+            //mf.listarDirectorio("zcarpeta");
+            //InfoFichero iff = new InfoFichero(file);
+            //iff.mostrarInfo();
             
         } catch (FileNotFoundException f) {
             System.out.println(f.getMessage());
