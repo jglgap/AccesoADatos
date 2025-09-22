@@ -26,7 +26,7 @@ public class ClasificaDirectorio {
                              File directorio = new File(directorioRaiz,name);
                              directorio.mkdir();
                              //esto no funciona
-                             if (nombre.toUpperCase().endsWith(extension) == name.endsWith(name)) {
+                             if (nombre.toUpperCase().endsWith(extension)) {
                                archivo.renameTo(directorio);
                              }
                         }
