@@ -32,7 +32,7 @@ public class ManejoFichero {
                 
             }
             } catch (EOFException e) {
-               System.out.println("se mamo");
+               System.out.println("Final de fichero");
             }
           
 
