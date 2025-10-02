@@ -17,10 +17,10 @@ public class ExtraerZip {
             ZipEntry entrada;
             
             while ((entrada = zis.getNextEntry()) != null) {
-                System.out.println("extrayendo fichero" + entrada.getName());
+                System.out.println("extrayendo fichero " + entrada.getName());
 
                 File newFile = new File(destino,entrada.getName());
-                new File(newFile.getParent()).mkdir();
+                new File(newFile.getParent()).mkdirs();
 
                 try(FileOutputStream fos = new FileOutputStream(newFile)){
                     byte[] buffer= new byte[1024];

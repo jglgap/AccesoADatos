@@ -12,7 +12,7 @@ public class App {
         Scanner sc  = new Scanner(System.in);
         int numero = 0;
         while (numero < 3) {
-            System.out.println("1-Comprimir");
+            System.out.println("1-Comprimir \n2-Descomprimir zip \n3-Comprimir directorio");
             int option = Integer.parseInt(sc.nextLine());
             switch (option) {
                 case 1:
@@ -42,9 +42,16 @@ public class App {
                     String destino = sc.nextLine();
                     ez.descomprimir(fichZip, destino);
 
-                    
+                
                     break;
                 case 3:
+                    System.out.println("Esta es la funcion de comprimir un directorio");
+                    System.out.println("Introduce el nombre del directorio que quieres comprimir");
+                    String dicZip = sc.nextLine();
+                    cz.comprimirDirectorioEntero(dicZip);
+
+                    break;
+                case 4:
                     numero = 4;
                 default:
                     break;

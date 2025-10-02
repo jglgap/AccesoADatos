@@ -37,5 +37,43 @@ public class CrearZip {
 
     }
 
+    public void comprimirDirectorioEntero(String nombreDirectorio)throws IOException{
+        String nuevoFichero = nombreDirectorio + ".zip";
+
+        File directorio = new File(nombreDirectorio);
+        
+       
+        
+
+        try (FileOutputStream fos = new FileOutputStream(nuevoFichero); ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+ 
+        for (File file : directorio.listFiles()) {
+            //guardar subdirectorios
+            
+            if (file.isDirectory()) {
+                file.mkdir();
+            }
+
+            File DirectoryToZip = new File(file.getPath());
+            FileInputStream fis = new FileInputStream(DirectoryToZip);
+            ZipEntry zipEntry = new ZipEntry(DirectoryToZip.getName());
+            zipOut.putNextEntry(zipEntry);
+
+            byte[] buffer = new byte[1024];
+            int byteLeidos;
+            while ((byteLeidos = fis.read(buffer)) >= 0) {
+                zipOut.write(buffer, 0, byteLeidos);
+            }
+         }
+
+            zipOut.close();
+
+        } catch (IOException e) {
+            System.out.println("Error!, IOException");
+        }
+
+
+    }
+
 
 }
