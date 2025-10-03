@@ -58,7 +58,7 @@ public class CrearZip {
             //guardar subdirectorios
             
             // if (file.isDirectory()) {
-            //     file.mkdir();
+            //     comprimirDirectorioEntero(file, )
             // }
 
             File DirectoryToZip = new File(file.getPath());
