@@ -12,7 +12,7 @@ public class App {
         Scanner sc  = new Scanner(System.in);
         int numero = 0;
         while (numero < 3) {
-            System.out.println("1-Comprimir \n2-Descomprimir zip \n3-Comprimir directorio");
+            System.out.println("1-Comprimir \n2-Descomprimir zip \n3-Comprimir directorio\n4-Añadir a zip \n5-Salir");
             int option = Integer.parseInt(sc.nextLine());
             switch (option) {
                 case 1:
@@ -52,6 +52,10 @@ public class App {
 
                     break;
                 case 4:
+                    System.out.println("Este metodo añade el fichero ficheros/hola.txt en a.zip");
+                    cz.introducirEnZip();
+                    break;
+                case 5:
                     numero = 4;
                 default:
                     break;
