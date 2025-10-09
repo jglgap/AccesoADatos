@@ -34,14 +34,14 @@ public class Equipo implements Serializable, Comparable<Equipo>{
 
     @Override
     public String toString() {
-        return this.nombre + ", victorias: " + this.derrotas + ", derrotas: " + this.derrotas + ", puntos totales: " + this.getPuntos();
+        return this.nombre + ", victorias: " + this.victorias + ", derrotas: " + this.derrotas + ", puntos totales: " + this.getPuntos();
 
     }
 
     @Override
     public int compareTo(Equipo otro) {
         //Arrays.sort(equipos, Comparator.nullsLast(Comparator.naturalOrder()));
-       // if (otro == null) return 1;
+        
        return Integer.compare(otro.getPuntos(), this.getPuntos());
     }
  

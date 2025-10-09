@@ -9,7 +9,7 @@ public class App {
 
         int cont = 0;
         while (cont< 6) {
-            System.out.println("1-Añadir equipo a la clasificacion \n2-Mostrar clasificacion \n3-Cargar clasificicacion");
+            System.out.println("1-Añadir equipo a la clasificacion \n2-Mostrar clasificacion \n3-Cargar clasificicacion \n4-Leer clasificacion \n5-Salir del programa");
             int option = Integer.parseInt(sc.nextLine());
             switch (option) {
                 case 1:
@@ -20,8 +20,13 @@ public class App {
                     System.out.println(c);
                     break;
                 case 3:
-                    c.loadClasificacion(c.getEquipos());
+                    Clasificacion.saveClasificacion(c.getEquipos());
                     break;
+                case 4:
+                    Clasificacion.loadClasificacion();
+                    break;
+                case 5:
+                    cont = 6;
                 default:
                     break;
             }
