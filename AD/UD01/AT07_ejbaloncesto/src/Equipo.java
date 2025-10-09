@@ -40,13 +40,13 @@ public class Equipo implements Serializable, Comparable<Equipo>{
 
     @Override
     public int compareTo(Equipo otro) {
-       
-
         //Arrays.sort(equipos, Comparator.nullsLast(Comparator.naturalOrder()));
        // if (otro == null) return 1;
        return Integer.compare(otro.getPuntos(), this.getPuntos());
     }
-    
+ 
+
+
 
 
 }

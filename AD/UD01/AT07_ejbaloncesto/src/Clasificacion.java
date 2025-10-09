@@ -1,6 +1,12 @@
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class Clasificacion implements Serializable{
     
@@ -20,9 +26,9 @@ public class Clasificacion implements Serializable{
 
     }
 
-    public void ordenarArray(){
-        Arrays.sort(equipos);
-    }
+    
+
+    
 
     //metodo para añadir equipo al array
     public void addEquipo(){
@@ -45,8 +51,16 @@ public class Clasificacion implements Serializable{
     }
 
 
-    public static void loadClasificacion(){
-
+    public static void loadClasificacion(Equipo[] equipos){
+        
+        try (FileOutputStream stream = new FileOutputStream("clasificacion.dat"); ObjectOutputStream out = new ObjectOutputStream(stream)) {
+            //se pasa el treeSet que ordena directamente
+            TreeSet<Equipo> treeEquipos = new TreeSet<Equipo>(Arrays.asList(equipos));
+            out.writeObject(treeEquipos);
+            out.flush();
+        } catch (IOException e) {
+            System.out.println("Hubo problemas en la creacion del fichero");
+        }
     }
 
     public static void saveClasificacion(){
@@ -56,9 +70,12 @@ public class Clasificacion implements Serializable{
 
     @Override
     public String toString() {
-        this.ordenarArray();
-        return Arrays.toString(equipos);
+        Arrays.sort(this.equipos);
+        return Arrays.toString(this.equipos);
     }
 
+    public Equipo[] getEquipos() {
+        return equipos;
+    }
 
 }
