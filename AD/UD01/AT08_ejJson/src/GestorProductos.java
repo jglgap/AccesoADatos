@@ -24,7 +24,7 @@ public class GestorProductos {
         JsonObject jObject = new JsonObject();
         jObject.add("Productos",jsonArray);
         try (FileWriter writer = new FileWriter("producto.json")) {
-            gson.toJson(listaProductos,writer);
+            gson.toJson(jObject,writer);
         } catch (IOException e) {
             System.out.println("Problemas a la hora de crear el fichero");
         }
