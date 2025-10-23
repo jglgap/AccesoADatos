@@ -46,4 +46,12 @@ public class GestorBiblioteca {
         }  
 
     }
+
+
+    //getter
+
+    public String getNombreDB() {
+        return nombreDB;
+    }
+
 }

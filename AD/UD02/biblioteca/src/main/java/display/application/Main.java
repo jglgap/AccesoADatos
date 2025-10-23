@@ -10,8 +10,8 @@ public class Main {
 
     public static void main(String[] args) {
         
-        GestorBiblioteca gb = new GestorBiblioteca();
-        gb.conectar();
+      GestorLibro gl =  new GestorLibro();
+      gl.crearLibro();
 
     }
 }
