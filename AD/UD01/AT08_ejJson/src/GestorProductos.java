@@ -2,6 +2,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -10,37 +11,44 @@ import com.google.gson.Gson;
 
 public class GestorProductos {
     
-    ArrayList <Producto> listaProductos = new ArrayList<>();
-    
-    public void almacenar(){
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder = gsonBuilder.setPrettyPrinting();
-        Gson gson = gsonBuilder.create();
+    private static final String nombreFichero = "productos.json";
 
-        JsonArray jsonArray = new JsonArray();
-        for (Producto p : this.listaProductos) {
-            jsonArray.add(gson.toJsonTree(p));
-        }
-        JsonObject jObject = new JsonObject();
-        jObject.add("Productos",jsonArray);
-        try (FileWriter writer = new FileWriter("producto.json")) {
-            gson.toJson(jObject,writer);
+    public static void guardarProductos(ArrayList<Producto> productos) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (FileWriter writer = new FileWriter(nombreFichero)) {
+            gson.toJson(productos, writer);
+            System.out.println("Archivo " + nombreFichero + " guardado correctamente.");
         } catch (IOException e) {
-            System.out.println("Problemas a la hora de crear el fichero");
+            System.out.println("Error al guardar el archivo: " + e.getMessage());
         }
-
     }
 
-    public void leerJson(){
-        Gson gson = new Gson();
-
-        try (FileReader fr = new FileReader("producto.json")) {
-            
-
-
-        } catch (Exception e) {
-            System.out.println("problemas al leer");
+    
+    public static void mostrarProductos() {
+        try (FileReader reader = new FileReader(nombreFichero)) {
+            int caracter;
+            while ((caracter = reader.read()) != -1) {
+                System.out.print((char) caracter);
+            }
+           
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
         }
+    }
+
+    
+    public static ArrayList<Producto> cargarProductos() {
+        Gson gson = new Gson();
+        ArrayList<Producto> productos = new ArrayList<>();
+        try (FileReader reader = new FileReader(nombreFichero)) {
+            Producto[] productosArray = gson.fromJson(reader, Producto[].class);
+            if (productosArray != null) {
+                productos.addAll(Arrays.asList(productosArray));
+            }
+        } catch (IOException e) {
+            System.out.println("Error al cargar productos: " + e.getMessage());
+        }
+        return productos;
     }
     
 }

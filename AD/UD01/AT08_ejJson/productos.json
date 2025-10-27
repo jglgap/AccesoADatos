@@ -1,0 +1,32 @@
+[
+  {
+    "nome": "Cable USB",
+    "prezo": 2.5,
+    "disponible": false,
+    "categorias": [
+      "tecnologia",
+      "materiales"
+    ],
+    "stock": 5,
+    "descripcion": "cable de 1m",
+    "proveedor": {
+      "nombre": "Antonio",
+      "telefono": "969969969"
+    }
+  },
+  {
+    "nome": "Jamon iberico",
+    "prezo": 15.49,
+    "disponible": true,
+    "categorias": [
+      "Comida",
+      "España "
+    ],
+    "stock": 154,
+    "descripcion": "La mejor paleta",
+    "proveedor": {
+      "nombre": "Juan",
+      "telefono": "696696696"
+    }
+  }
+]
