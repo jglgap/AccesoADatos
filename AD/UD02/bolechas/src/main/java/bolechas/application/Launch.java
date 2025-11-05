@@ -26,6 +26,11 @@ public class Launch {
                     int opt = Integer.parseInt(sc.nextLine());
                     gt.gestionClientes(opt);
                     break;
+                case 4:
+                    System.out.println("1-Crear producto \n" + "2-Actualizar producto\n" + "3-Eliminar producto");
+                    int choose = Integer.parseInt(sc.nextLine());
+                    gt.gestionProductos(choose);
+                    break;
                 default:
                     break;
             }

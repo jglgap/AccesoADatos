@@ -2,6 +2,7 @@ package bolechas.application;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Scanner;
 
@@ -117,32 +118,142 @@ public class GestorTablas {
     }
 
     public void gestionClientes(int option) {
-        Scanner sc = new Scanner(System.in); 
-            switch (option) {
-                case 1:
-                    System.out.println("Insertar DNI");
-                    String DNI = sc.nextLine();
-                    System.out.println("Insertar nombre");
-                    String nombre = sc.nextLine();
-                    insertarCliente(DNI, nombre);
-                    break;
-                case 2:
-                    System.out.println("Insertar del cliente a actualizar");
-                    String dniActualizar = sc.nextLine().toLowerCase();
-                    System.out.println("Insertar nuevo nombre");
-                    String nombreActualizar = sc.nextLine();
-                    actualizarCliente(dniActualizar, nombreActualizar);
-                    break;
-                case 3:
-                    System.out.println("Insertar dni del cliente a borrar");
-                    String dniBorrar = sc.nextLine().toLowerCase();
-                    borrarCliente(dniBorrar);
-                    break;
-                default:
-                    break;
-            }
-      
+        Scanner sc = new Scanner(System.in);
+        switch (option) {
+            case 1:
+                System.out.println("Insertar DNI");
+                String DNI = sc.nextLine();
+                System.out.println("Insertar nombre");
+                String nombre = sc.nextLine();
+                insertarCliente(DNI, nombre);
+                break;
+            case 2:
+                System.out.println("Insertar del cliente a actualizar");
+                String dniActualizar = sc.nextLine().toLowerCase();
+                System.out.println("Insertar nuevo nombre");
+                String nombreActualizar = sc.nextLine();
+                actualizarCliente(dniActualizar, nombreActualizar);
+                break;
+            case 3:
+                System.out.println("Insertar dni del cliente a borrar");
+                String dniBorrar = sc.nextLine().toLowerCase();
+                borrarCliente(dniBorrar);
+                break;
+            default:
+                break;
+        }
 
     }
+
+    // Gestionar productos
+
+    public void insertarProducto(double precio, String nombre, String descripcion) {
+        try (Connection c = conexionBd()) {
+            Statement sta = c.createStatement();
+            ResultSet rs = sta.executeQuery("Select MAX(productoId) as maxId FROM PRODUCTO");
+            int idLast = 0;
+            while (rs.next()) {
+                idLast = rs.getInt("maxId");
+            }
+            int newId = idLast + 1;
+            System.out.println(newId);
+            String crearProducto = "INSERT INTO PRODUCTO(productoId,nombre,descripcion,precio) VALUES(?,?,?,?)";
+            try (PreparedStatement pst = c.prepareStatement(crearProducto)) {
+                pst.setInt(1, newId);
+                pst.setString(2, nombre);
+                pst.setString(3, descripcion);
+                pst.setDouble(4, precio);
+                pst.executeUpdate();
+                System.out.println("Creado correctamente");
+            } catch (Exception e) {
+                System.out.println("Error en la query");
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR inesperado");
+        }
+    }
+
+    public void actualizarProducto(int id, String newNombre, String newDescripcion, double newPrecio) {
+        try (Connection c = conexionBd()) {
+            String actualizarProducto = "UPDATE PRODUCTO SET nombre = ?,  descripcion = ?, precio = ? WHERE productoId = ?";
+            try (PreparedStatement pst = c.prepareStatement(actualizarProducto)) {
+                pst.setString(1, newNombre);
+                pst.setString(2, newDescripcion);
+                pst.setDouble(3, newPrecio);
+                pst.setInt(4, id);
+                pst.executeUpdate();
+                System.out.println("Actualizacion realizada correctamente");
+            } catch (Exception e) {
+                System.out.println("Error query");
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR inesperado");
+        }
+    }
+
+    public void borrarProducto(int id) {
+        try (Connection c = conexionBd()) {
+            String borrarProducto = "DELETE FROM PRODUCTO WHERE productoId = ?";
+            try (PreparedStatement pst = c.prepareStatement(borrarProducto)) {
+                pst.setInt(1, id);
+                pst.executeUpdate();
+                System.out.println("Borrado realizado correctamente");
+            } catch (Exception e) {
+                System.out.println("Error query");
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR inesperado");
+        }
+    }
+
+    public void gestionProductos(int option) {
+        Scanner sc = new Scanner(System.in);
+        switch (option) {
+            case 1:
+                System.out.println("introduce el nombre del producto");
+                String nombre = sc.nextLine();
+                System.out.println("Introduce la descripcion");
+                String descripcion = sc.nextLine();
+                System.out.println("introduce el precio");
+                double precio = Double.parseDouble(sc.nextLine());
+                insertarProducto(precio, nombre, descripcion);
+                break;
+            case 2:
+                System.out.println("introduce el id del producto a actualizar");
+                int id = Integer.parseInt(sc.nextLine());
+                System.out.println("Introduce el nuevo nombre");
+                String newNombre = sc.nextLine();
+                System.out.println("introduce la nueva descripcion");
+                String newDescripcion = sc.nextLine();
+                System.out.println("introduce el nuevo precio");
+                Double newPrecio = Double.parseDouble(sc.nextLine()); 
+                actualizarProducto(id, newNombre, newDescripcion, newPrecio);
+                break;
+            case 3:
+                System.out.println("introduce el id a borrar");
+                int borrado = Integer.parseInt(sc.nextLine());
+                borrarProducto(borrado);
+            default:
+                break;
+        }
+    }
+
+    //Pedidos de un cliente
+
+    public void clientePedidos(String idCliente){
+        try (Connection c = conexionBd()) {
+            String getPedidosCliente = "SELECT P.idPedido,P.fecha ,P.dniCliente, P.idProducto,PR.nombre AS nombreProducto, P.cantida FROM PEDIDO  JOIN PRODUCTO PR ON P.idProducto = PR.productoId WHERE P.dniCliente = ?";
+            try (PreparedStatement pst = c.prepareStatement(getPedidosCliente)) {
+                pst.setString(1, idCliente);
+                pst.executeQuery();
+            } catch (Exception e) {
+                System.out.println("Error query");
+            }
+        
+        } catch (Exception e) {
+            System.out.println("ERROR inesperado");
+        }
+    }
+
 
 }
