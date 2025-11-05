@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 import bolechas.connection.MySqlConnection;
@@ -226,7 +228,7 @@ public class GestorTablas {
                 System.out.println("introduce la nueva descripcion");
                 String newDescripcion = sc.nextLine();
                 System.out.println("introduce el nuevo precio");
-                Double newPrecio = Double.parseDouble(sc.nextLine()); 
+                Double newPrecio = Double.parseDouble(sc.nextLine());
                 actualizarProducto(id, newNombre, newDescripcion, newPrecio);
                 break;
             case 3:
@@ -238,22 +240,56 @@ public class GestorTablas {
         }
     }
 
-    //Pedidos de un cliente
+    // Pedidos de un cliente
 
-    public void clientePedidos(String idCliente){
+    public void clientePedidos(String idCliente) {
         try (Connection c = conexionBd()) {
-            String getPedidosCliente = "SELECT P.idPedido,P.fecha ,P.dniCliente, P.idProducto,PR.nombre AS nombreProducto, P.cantida FROM PEDIDO  JOIN PRODUCTO PR ON P.idProducto = PR.productoId WHERE P.dniCliente = ?";
+            String getPedidosCliente = "SELECT P.idPedido,P.fecha ,P.dniCliente, P.idProducto,PR.nombre AS nombreProducto, PR.precio as precio, P.cantidad FROM PEDIDO P JOIN PRODUCTO PR ON P.idProducto = PR.productoId WHERE P.dniCliente = ?";
             try (PreparedStatement pst = c.prepareStatement(getPedidosCliente)) {
                 pst.setString(1, idCliente);
-                pst.executeQuery();
+                ResultSet rs = pst.executeQuery();
+                while (rs.next()) {
+                    System.out.println("id pedido: " + rs.getInt("idPedido") + " fecha: " + rs.getString("fecha")
+                            + " dni: " + rs.getString("dniCliente") + " producto: " + rs.getString("nombreProducto") +
+                            " cantidad:" + rs.getInt("cantidad") + " total: "
+                            + (rs.getDouble("precio") * rs.getInt("cantidad")));
+                }
             } catch (Exception e) {
-                System.out.println("Error query");
+                System.out.println("error en la query");
             }
-        
+
         } catch (Exception e) {
             System.out.println("ERROR inesperado");
         }
     }
 
+    public void realizarPedido(String dni, int idProducto, int cantidad) {
+        try (Connection c = conexionBd()) {
+            Statement sta = c.createStatement();
+            ResultSet rs = sta.executeQuery("Select MAX(idPedido) as id FROM PEDIDO");
+            int lastId = 0;
+            while (rs.next()) {
+                lastId = rs.getInt("id");
+            }
+            int newId = lastId + 1;
+            Date fechaActual = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String fechaFormateada = sdf.format(fechaActual);
+            String crearPedido = "INSERT INTO PEDIDO(idPedido,fecha,dniCliente,idProducto,cantidad) VALUES(?,?,?,?,?)";
+            try (PreparedStatement pst = c.prepareStatement(crearPedido)) {
+                pst.setInt(1, newId);
+                pst.setString(2, fechaFormateada);
+                pst.setString(3, dni);
+                pst.setInt(4, idProducto);
+                pst.setInt(5, cantidad);
+                pst.executeUpdate();
+                System.out.println("pedido realizado");
+            } catch (Exception e) {
+                System.out.println("Error query");
+            }
 
+        } catch (Exception e) {
+            System.out.println("ERROR inesperado");
+        }
+    }
 }
