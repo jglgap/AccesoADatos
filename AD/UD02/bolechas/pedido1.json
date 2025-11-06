@@ -1,0 +1,8 @@
+{
+  "idPedido": 1,
+  "fecha": "18/3/2026",
+  "dniCliente": "12345678x",
+  "idProducto": 1,
+  "nombreProducto": "primer producto",
+  "cantidad": 5
+}

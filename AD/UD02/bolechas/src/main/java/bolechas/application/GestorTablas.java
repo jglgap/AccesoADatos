@@ -1,5 +1,6 @@
 package bolechas.application;
 
+import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,6 +8,9 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import bolechas.connection.MySqlConnection;
 
@@ -292,4 +296,29 @@ public class GestorTablas {
             System.out.println("ERROR inesperado");
         }
     }
+
+    public void pedidoJson(int idPedido){
+        try (Connection c = conexionBd()) {
+            String pedidoElegido = "SELECT P.idPedido,P.fecha ,P.dniCliente, P.idProducto,PR.nombre AS nombreProducto,  P.cantidad FROM PEDIDO P JOIN PRODUCTO PR WHERE idPedido = ?";
+            try (PreparedStatement pst = c.prepareStatement(pedidoElegido)) {
+                pst.setInt(1, idPedido);
+                ResultSet rs = pst.executeQuery();
+                while (rs.next()) {
+                    Pedido pedido = new Pedido(rs.getInt("idPedido"), rs.getString("fecha"), rs.getString("dniCliente"), rs.getInt("idProducto"), rs.getString("nombreProducto"), rs.getInt("cantidad"));
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    try (FileWriter fl = new FileWriter("pedido" + idPedido + ".json")) {
+                        gson.toJson(pedido,fl);
+                    } catch (Exception e) {
+                        System.out.println("Problemas creando fichero");
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error query");
+            }
+        
+        } catch (Exception e) {
+            System.out.println("ERROR inesperado");
+        }
+    }
+
 }

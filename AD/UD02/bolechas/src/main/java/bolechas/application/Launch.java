@@ -42,6 +42,10 @@ public class Launch {
                     int cantidad = Integer.parseInt(sc.nextLine());
                     gt.realizarPedido(dni, idProducto, cantidad);
                     break;
+                case 7:
+                    System.out.println("Introduce el id del pedido");
+                    gt.pedidoJson(Integer.parseInt(sc.nextLine()));
+                    break;
                 default:
                     break;
             }

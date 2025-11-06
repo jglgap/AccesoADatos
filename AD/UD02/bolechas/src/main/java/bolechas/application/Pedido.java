@@ -5,14 +5,16 @@ public class Pedido {
     private String fecha;
     private String dniCliente;
     private int idProducto;
+    private String nombreProducto;
     private int cantidad;
 
 
-    public Pedido(int idPedido, String fecha, String dniCliente, int idProducto, int cantidad){
+    public Pedido(int idPedido, String fecha, String dniCliente, int idProducto,String nombreProducto, int cantidad){
         this.idPedido = idPedido;
         this.fecha = fecha;
         this.dniCliente = dniCliente;
         this.idProducto = idProducto;
+        this.nombreProducto = nombreProducto;
         this.cantidad = cantidad;
     }
 
