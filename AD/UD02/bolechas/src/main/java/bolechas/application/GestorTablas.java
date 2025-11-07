@@ -12,14 +12,17 @@ import java.util.Scanner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import bolechas.connection.MariaDbConnection;
 import bolechas.connection.MySqlConnection;
 
 public class GestorTablas {
 
     public Connection conexionBd() {
-        MySqlConnection conn = new MySqlConnection();
+        // MySqlConnection conn = new MySqlConnection();
+        MariaDbConnection conn = new MariaDbConnection();
         GestorBaseDatos gb = new GestorBaseDatos();
-        conn.setUrl(conn.getUrl() + gb.getDbName());
+        //conn.setUrl(conn.getUrl() + gb.getDbName());
+        conn.setUrl(conn.getUrl() + gb.getMariaDBbd());
         return conn.getConnection();
     }
 
