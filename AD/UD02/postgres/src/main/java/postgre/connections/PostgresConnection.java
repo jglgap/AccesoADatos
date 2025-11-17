@@ -21,7 +21,8 @@ public class PostgresConnection implements DBConnection{
 
     @Override
     public Connection getConnection() {
-        String url = ConfigLoader.get("postgresql.urlInicial") + ConfigLoader.get("postgresql.dbName");
+        String url = ConfigLoader.get("postgres.urlBase");
+        
         try {
             return DriverManager.getConnection(url, ConfigLoader.get("postgresql.user"), ConfigLoader.get("postgresql.password"));
         } catch (Exception e) {

@@ -6,21 +6,14 @@ import postgre.connections.PostgresConnection;
 
 public class Launch {
 
-    public static void prueba(){
-        PostgresConnection pg = new PostgresConnection();
-        try (Connection c = pg.getConnectionServer()) {
-            if (c != null) {
-                System.out.println("we are in");
-            }
-        } catch (Exception e) {
-            System.out.println("error");
-        }
-    }
-
     public static void main(String[] args) {
         GestorDB gb = new GestorDB();
         gb.crearDB();
-        prueba();
+        gb.crearTabla();
+        gb.crearAlumno(2, "PAblo", "a23@hotmail.com", 23);
+        gb.borrarAlumno(2);
+        gb.actualizarAlumno(2, "Antonio", "a24@gmail.com", 16);
+        gb.mostrarAlumnos();
     }
     
 }
