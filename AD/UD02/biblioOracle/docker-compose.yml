@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  oracle-xe:
+    image: gvenzl/oracle-xe:latest
+    container_name: oracle-db
+    environment:
+      ORACLE_PASSWORD: admin  # Cambia esta contraseña
+      APP_USER: admin                  # Usuario adicional opcional
+      APP_USER_PASSWORD: admin     # Contraseña del usuario adicional
+    ports:
+      - "1521:1521"                      # Puerto por defecto de Oracle
+    volumes:
+      - oracle-data:/opt/oracle/oradata  # Persistencia de datos
+    restart: unless-stopped
+    shm_size: 1g                        # Importante: Oracle necesita memoria compartida
+
+volumes:
+  oracle-data:
