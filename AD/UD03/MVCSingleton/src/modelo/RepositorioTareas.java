@@ -76,15 +76,26 @@ public class RepositorioTareas {
      * </p>
      *
      * @param nuevaTarea la tarea que se desea agregar
+     * @throws Exception 
      */
-    public void agregarTarea(Tarea nuevaTarea) {
+    public void agregarTarea(Tarea nuevaTarea) throws Exception {
+        Boolean flag = false;
         for (Tarea tarea : tareas) {
             if (tarea.getId() == nuevaTarea.getId()) {
-                System.out.println("Ya existe una tarea con ese id");
-            } else {
-                this.tareas.add(nuevaTarea);
+                flag = true;
             }
         }
+
+        if (flag != true){
+
+            this.tareas.add(nuevaTarea);    
+        }
+        else{
+
+            throw new Exception("Ya hay una con ese id");
+        }
+
+                 
     }
 
     /**

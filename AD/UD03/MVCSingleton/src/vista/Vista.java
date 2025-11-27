@@ -16,8 +16,15 @@ public class Vista extends JFrame {
     JButton btnCompletar = new JButton("Completar");
     private JTextArea areaResultado;
     
+
+    public JButton getBtnCompletar() {
+        return btnCompletar;
+    }
     
-  
+    public JButton getBtnEliminar() {
+        return btnEliminar;
+    }
+
     public JButton getBtnAgregar() {
         return btnAgregar;
     }
@@ -69,8 +76,12 @@ public class Vista extends JFrame {
     }
   
 
+    public void showError(String mensaje){
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
 
-
-   
+   public void showConfirmation(String mensaje){
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.INFORMATION_MESSAGE);
+    }
 
 }
