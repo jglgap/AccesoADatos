@@ -95,4 +95,16 @@ public class Tarea {
     public void setCompletada(boolean completada) {
         this.completada = completada;
     }
+
+
+    @Override
+    public String toString() {
+        if (completada == true) {
+            return "Id: " + this.getId() + " titulo: " +this.getTitulo() + " descripcion: " + this.getDescripcion() + " completada: " + "si";
+            
+        }else{
+            return "Id: " + this.getId() + " titulo: " +this.getTitulo() + " descripcion: " + this.getDescripcion() + " completada: " + "no";
+        }
+
+    }
 }

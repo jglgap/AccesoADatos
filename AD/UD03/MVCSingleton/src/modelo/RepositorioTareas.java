@@ -11,8 +11,11 @@ import java.util.ArrayList;
  */
 public class RepositorioTareas {
 
+   
+
     /** Lista que almacena las tareas del repositorio. */
-    private ArrayList<Tarea> tareas;
+    private ArrayList<Tarea> tareas ;
+    
 
     /** Instancia única del repositorio (Singleton). */
     private static RepositorioTareas instance;
@@ -21,6 +24,10 @@ public class RepositorioTareas {
      * Constructor privado para implementar el patrón Singleton.
      */
     private RepositorioTareas() {
+
+        this.tareas = new ArrayList<>();
+        tareas.add(new Tarea(1, "tarea 1", "esta es la primera tarea", false));
+        tareas.add(new Tarea(2, "tarea 2", "esta es la segunda tarea", true));
 
     }
 
