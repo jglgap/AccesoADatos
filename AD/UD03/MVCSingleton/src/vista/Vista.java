@@ -42,7 +42,7 @@ public class Vista extends JFrame {
 
     public Vista() {
         setTitle("Gestor de Tareas");
-        setSize(600, 400);
+        setSize(700, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
