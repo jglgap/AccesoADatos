@@ -66,4 +66,9 @@ public class BattleView {
     }
 
 
+        public void mostrarGanador(String resultdo){
+            System.out.println(resultdo);
+        }
+
+
 }

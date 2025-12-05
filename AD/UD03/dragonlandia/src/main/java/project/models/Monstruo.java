@@ -114,7 +114,7 @@ public class Monstruo {
      */
     public void setVida(int vida) {
         if (vida < 0) {
-            throw new IllegalArgumentException("La vida no puede ser menor que 0");
+            vida = 0;
         }
         this.vida = vida;
     }
@@ -162,17 +162,7 @@ public class Monstruo {
      * @param mago Mago objetivo del ataque.
      */
     public void atacar(Mago mago){
-        Session session = null;
-        try(SessionFactory factory = new Configuration().configure("hibernate.cgf.xml").buildSessionFactory()){
-            session = factory.getCurrentSession();
-            Transaction tx =  session.beginTransaction();
-
             mago.setVida(mago.getVida() - this.fuerza);
-            session.merge(mago);
-            tx.commit();
-        }catch (Exception e){
-            System.out.println("Problemas, ataque de monstruo: " + e.getMessage());
-        }
     }
 
 }
