@@ -1,5 +1,7 @@
 package project.models;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 
 /**
@@ -30,9 +32,16 @@ public class Bosque {
     /**
      * Monstruo jefe que habita en el bosque.
      */
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "monstruo_id", nullable = false)
     private Monstruo monstruoJefe;
+
+
+
+    @OneToMany(targetEntity = Monstruo.class )
+    private List<Monstruo> listaMonstruos;
+
+
 
     /**
      * Constructor vacío requerido por JPA.
@@ -46,10 +55,11 @@ public class Bosque {
      * @param nivelPeligro Nivel de peligro del bosque.
      * @param monstruoJefe Monstruo jefe del bosque.
      */
-    public Bosque(String nombre, int nivelPeligro, Monstruo monstruoJefe) {
+    public Bosque(String nombre, int nivelPeligro, Monstruo monstruoJefe, List<Monstruo> monstruos) {
         this.nombre = nombre;
         this.nivelPeligro = nivelPeligro;
         this.monstruoJefe = monstruoJefe;
+        this.listaMonstruos = monstruos;
     }
 
     /**
