@@ -1,7 +1,9 @@
 package project.views;
 
+import java.util.List;
 import java.util.Scanner;
 
+import project.models.Bosque;
 import project.models.Mago;
 import project.models.Monstruo;
 import project.models.TipoMonstruo;
@@ -65,6 +67,14 @@ public class BattleView {
         }
     }
 
+
+    public Bosque getValoresBosque(Monstruo jefe, List<Monstruo> monstruos){
+        System.out.println("Introduce nombre del bosque");
+        String nombreBosque = sc.nextLine();
+        System.out.println("Introduce el nivel de peligro del bosque");
+        int nivelPeligro = Integer.parseInt(sc.nextLine());
+        return new Bosque(nombreBosque,nivelPeligro,jefe,monstruos);
+    }
 
         public void mostrarGanador(String resultdo){
             System.out.println(resultdo);
