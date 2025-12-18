@@ -9,8 +9,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-
+import project.connections.Connection;
 import project.models.Bosque;
+import project.models.Dragon;
+import project.models.Hechizo;
 import project.models.Mago;
 import project.models.Monstruo;
 import project.views.BattleView;
@@ -26,14 +28,15 @@ import project.views.BattleView;
 public class Controller {
 
     private BattleView vista;
-
+    private Connection conn;
         /**
      * Constructor de la clase Controller.
      * 
      * @param vista instancia de la vista encargada de solicitar y mostrar datos al usuario.
      *              Al construirse el controlador, se lanza el menú principal.
      */
-    public Controller(BattleView vista) {
+    public Controller(Connection conn , BattleView vista) {
+        this.conn = conn;
         this.vista = vista;
         menu();
     }
@@ -43,15 +46,23 @@ public class Controller {
      */
     public void crearMago() {
         Session session = null;
-        Mago magoCreado = vista.getValoresmago();
-        try (SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory()) {
+        Mago magoCreado = null;
+        Transaction tx = null;
+        try (SessionFactory factory = conn.getFactory()) {
             session = factory.getCurrentSession();
-            Transaction tx = session.beginTransaction();
+            tx = session.beginTransaction();
+            Hechizo bolaFuego = session.find(Hechizo.class, 1);
+            Hechizo rayo = session.find(Hechizo.class, 2);
+            Hechizo bolaNieve = session.find(Hechizo.class, 3);
+            Hechizo atormentacion = session.find(Hechizo.class, 4);
+            List<Hechizo> conjuros = Arrays.asList(bolaFuego,rayo,bolaNieve,atormentacion);
+            magoCreado = vista.getValoresmago(conjuros);
             session.persist(magoCreado);
             tx.commit();
 
         } catch (Exception e) {
             System.out.println("Problemas crendo el mago");
+            tx.rollback();
         }
     }
         /**
@@ -61,14 +72,16 @@ public class Controller {
     public void crearMostruo() {
         Session session = null;
         Monstruo monstruoCreado = vista.getValoresMonstruo();
-        try (SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory()) {
+        Transaction tx = null;
+        try (SessionFactory factory = conn.getFactory()) {
             session = factory.getCurrentSession();
-            Transaction tx = session.beginTransaction();
+            tx = session.beginTransaction();
             session.persist(monstruoCreado);
             tx.commit();
 
         } catch (Exception e) {
             System.out.println("Problemas crendo el mago");
+            tx.rollback();
         }
     }
 
@@ -130,10 +143,11 @@ public class Controller {
         Session session = null;
         Bosque bosque = null;
         Monstruo monstruo = null;
-        try (SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory()) {
+        Transaction tx = null;
+        try (SessionFactory factory = conn.getFactory()) {
 
             session = factory.getCurrentSession();
-            Transaction tx = session.beginTransaction();
+            tx = session.beginTransaction();
             bosque = session.find(Bosque.class, 1);
             monstruo = session.find(Monstruo.class, 2);
             bosque.setMonstruoJefe(monstruo);
@@ -142,6 +156,7 @@ public class Controller {
             tx.commit();
         } catch (Exception e) {
             System.out.println("Problemas ataque el monstruo");
+            tx.rollback();
         }
 
     }
@@ -155,10 +170,12 @@ public class Controller {
         Session session = null;
         Monstruo monstruo = null;
         Mago mago = null;
-        try (SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory()) {
+        Transaction tx = null;
+
+        try (SessionFactory factory = conn.getFactory()) {
 
             session = factory.getCurrentSession();
-            Transaction tx = session.beginTransaction();
+            tx = session.beginTransaction();
             mago = session.find(Mago.class, 1);
             monstruo = session.find(Monstruo.class, 1);
             while (monstruo.getVida() > 0 && mago.getVida() > 0) {
@@ -171,6 +188,7 @@ public class Controller {
             tx.commit();
         } catch (Exception e) {
             System.out.println("Problemas batalla" + e.getMessage());
+            tx.rollback();
         }
 
         String frase = "";
@@ -182,29 +200,49 @@ public class Controller {
 
         return frase;
     }
+
     /**
      * Crea un nuevo bosque. Obtiene tres monstruos de la base de datos y utiliza la vista
      * para construir un objeto Bosque que luego se persiste.
      */
     public void crearBosque() {
         Session session = null;
-        try (SessionFactory factory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory()) {
+        Transaction tx = null;
+        try (SessionFactory factory = conn.getFactory()) {
             session = factory.getCurrentSession();
-            Transaction tx = session.beginTransaction();
+            tx = session.beginTransaction();
             Monstruo jefe = session.find(Monstruo.class, 1);
             Monstruo m1 = session.find(Monstruo.class, 2);
             Monstruo m2 = session.find(Monstruo.class, 3);
+            Dragon dragon = session.find(Dragon.class, 1);
             List<Monstruo> monstruos = Arrays.asList(jefe,m1,m2);
-            Bosque bosque = vista.getValoresBosque(jefe, monstruos);
+            Bosque bosque = vista.getValoresBosque(jefe, monstruos,dragon);
             session.persist(bosque);
             tx.commit();
 
         } catch (Exception e) {
             System.out.println("Problemas crendo el bosque");
+            tx.rollback();
         }
 
     }
 
+
+    public void crearDragon(){
+        Session session = null;
+        Transaction tx = null;
+        try(SessionFactory factory = conn.getFactory()){
+            session = factory.getCurrentSession();
+            tx = session.beginTransaction();
+            Dragon dragon = vista.getValoresDragon();
+            session.persist(dragon);
+            tx.commit();
+        }catch(Exception e){
+            System.out.println("Problemas creando dragon");
+            tx.rollback();
+        }
+
+    }
      /**
      * Muestra un menú interactivo en consola que permite al usuario elegir acciones
      * como crear magos, monstruos, iniciar batallas o modificar el bosque. Las acciones
@@ -214,7 +252,9 @@ public class Controller {
         Scanner sc = new Scanner(System.in);
         boolean it = true;
         while (it) {
-            System.out.println("1-Crear mago \n2-Crear monstruo \n3-hacer batalla \n4-cambiar mostruo \n5-Crear bosque");
+            System.out.println("1-Crear mago \n2-Crear monstruo \n3-hacer batalla \n4-cambiar mostruo \n5-Crear bosque"+
+                " \n6-Crear dragon"
+            );
             int opc = Integer.parseInt(sc.nextLine());
             switch (opc) {
                 case 1:
@@ -234,6 +274,9 @@ public class Controller {
                     crearBosque();
                     break;
                 case 6:
+                    crearDragon();
+                    break;
+                case 7:
                     it = false;
                 default:
                     break;

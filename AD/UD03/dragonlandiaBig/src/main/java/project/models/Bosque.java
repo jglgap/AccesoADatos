@@ -58,11 +58,12 @@ public class Bosque {
      * @param nivelPeligro Nivel de peligro del bosque.
      * @param monstruoJefe Monstruo jefe del bosque.
      */
-    public Bosque(String nombre, int nivelPeligro, Monstruo monstruoJefe, List<Monstruo> monstruos) {
+    public Bosque(String nombre, int nivelPeligro, Monstruo monstruoJefe, List<Monstruo> monstruos,Dragon dragon) {
         this.nombre = nombre;
         this.nivelPeligro = nivelPeligro;
         this.monstruoJefe = monstruoJefe;
         this.listaMonstruos = monstruos;
+        this.dragon = dragon;
     }
 
     /**

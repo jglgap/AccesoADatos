@@ -4,21 +4,20 @@ import java.util.List;
 import java.util.Scanner;
 
 import project.models.Bosque;
+import project.models.Dragon;
+import project.models.Hechizo;
 import project.models.Mago;
 import project.models.Monstruo;
 import project.models.TipoMonstruo;
 
 public class BattleView {
 
-    
-
     public BattleView() {
     }
 
-
     Scanner sc = new Scanner(System.in);
 
-    public Mago getValoresmago(){
+    public Mago getValoresmago(List<Hechizo> conjuros) {
 
         try {
             System.out.println("Nombre del mago");
@@ -27,15 +26,14 @@ public class BattleView {
             int vidaMago = Integer.parseInt(sc.nextLine());
             System.out.println("Nivel de magia");
             int nivelMagiaMago = Integer.parseInt(sc.nextLine());
-            return new Mago(nombreMago,vidaMago,nivelMagiaMago);
+            return new Mago(nombreMago, vidaMago, nivelMagiaMago, conjuros);
         } catch (Exception e) {
-            return null; 
-       }
-        
+            return null;
+        }
+
     }
 
-
-    public Monstruo getValoresMonstruo(){
+    public Monstruo getValoresMonstruo() {
         try {
             System.out.println("Nombre del monstruo");
             String nombreMonstruo = sc.nextLine();
@@ -59,7 +57,7 @@ public class BattleView {
             }
             System.out.println("Fuerza del monstruo");
             int fuerza = Integer.parseInt(sc.nextLine());
-            return new Monstruo(nombreMonstruo,vida,tipo,fuerza);
+            return new Monstruo(nombreMonstruo, vida, tipo, fuerza);
 
         } catch (Exception e) {
             System.out.println("Problemas creando el monstruo " + e.getMessage());
@@ -67,18 +65,27 @@ public class BattleView {
         }
     }
 
-
-    public Bosque getValoresBosque(Monstruo jefe, List<Monstruo> monstruos){
+    public Bosque getValoresBosque(Monstruo jefe, List<Monstruo> monstruos, Dragon dragon) {
         System.out.println("Introduce nombre del bosque");
         String nombreBosque = sc.nextLine();
         System.out.println("Introduce el nivel de peligro del bosque");
         int nivelPeligro = Integer.parseInt(sc.nextLine());
-        return new Bosque(nombreBosque,nivelPeligro,jefe,monstruos);
+        return new Bosque(nombreBosque, nivelPeligro, jefe, monstruos, dragon);
     }
 
-        public void mostrarGanador(String resultdo){
-            System.out.println(resultdo);
-        }
+    public void mostrarGanador(String resultdo) {
+        System.out.println(resultdo);
+    }
 
+
+    public Dragon getValoresDragon(){
+        System.out.println("Introduce el nombre del dragon");
+        String nombre = sc.nextLine();
+        System.out.println("Introduce la intensidad del fuego del dragon");
+        int intensidad = Integer.parseInt(sc.nextLine());
+        System.out.println("Introduce la resistencia");
+        int resistencia = Integer.parseInt(sc.nextLine());
+        return new Dragon(nombre,intensidad,resistencia);
+    }
 
 }
