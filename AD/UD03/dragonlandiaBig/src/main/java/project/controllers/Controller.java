@@ -2,6 +2,9 @@ package project.controllers;
 
 import java.util.Arrays;
 import java.util.Scanner;
+
+import javax.swing.text.html.parser.Entity;
+
 import java.util.List;
 
 import org.hibernate.Session;
@@ -9,7 +12,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import project.connections.Connection;
+import project.connections.Manager;
 import project.models.Bosque;
 import project.models.Dragon;
 import project.models.Hechizo;
@@ -29,14 +35,16 @@ public class Controller {
 
     private BattleView vista;
     private Connection conn;
+    private Manager mang;
+
         /**
      * Constructor de la clase Controller.
      * 
      * @param vista instancia de la vista encargada de solicitar y mostrar datos al usuario.
      *              Al construirse el controlador, se lanza el menú principal.
      */
-    public Controller(Connection conn , BattleView vista) {
-        this.conn = conn;
+    public Controller(Manager mang , BattleView vista) {
+        this.mang = mang;
         this.vista = vista;
         menu();
     }
@@ -44,46 +52,85 @@ public class Controller {
      * Crea un nuevo mago utilizando los valores proporcionados por la vista.
      * El mago es persistido en la base de datos usando Hibernate.
      */
-    public void crearMago() {
-        Session session = null;
+    // public void crearMago() {
+    //     Session session = null;
+    //     Mago magoCreado = null;
+    //     Transaction tx = null;
+    //     try (SessionFactory factory = conn.getFactory()) {
+    //         session = factory.getCurrentSession();
+    //         tx = session.beginTransaction();
+    //         Hechizo bolaFuego = session.find(Hechizo.class, 1);
+    //         Hechizo rayo = session.find(Hechizo.class, 2);
+    //         Hechizo bolaNieve = session.find(Hechizo.class, 3);
+    //         Hechizo atormentacion = session.find(Hechizo.class, 4);
+    //         List<Hechizo> conjuros = Arrays.asList(bolaFuego,rayo,bolaNieve,atormentacion);
+    //         magoCreado = vista.getValoresmago(conjuros);
+    //         session.persist(magoCreado);
+    //         tx.commit();
+
+    //     } catch (Exception e) {
+    //         System.out.println("Problemas crendo el mago");
+    //         tx.rollback();
+    //     }
+    // }
+
+        public void crearMago() {
+ 
         Mago magoCreado = null;
-        Transaction tx = null;
-        try (SessionFactory factory = conn.getFactory()) {
-            session = factory.getCurrentSession();
-            tx = session.beginTransaction();
-            Hechizo bolaFuego = session.find(Hechizo.class, 1);
-            Hechizo rayo = session.find(Hechizo.class, 2);
-            Hechizo bolaNieve = session.find(Hechizo.class, 3);
-            Hechizo atormentacion = session.find(Hechizo.class, 4);
+        
+        try (EntityManagerFactory emf = mang.getEMF()) {
+            EntityManager em = emf.createEntityManager();
+            em.getTransaction().begin();
+            Hechizo bolaFuego = em.find(Hechizo.class, 1);
+            Hechizo rayo = em.find(Hechizo.class, 2);
+            Hechizo bolaNieve = em.find(Hechizo.class, 3);
+            Hechizo atormentacion = em.find(Hechizo.class, 4);
             List<Hechizo> conjuros = Arrays.asList(bolaFuego,rayo,bolaNieve,atormentacion);
             magoCreado = vista.getValoresmago(conjuros);
-            session.persist(magoCreado);
-            tx.commit();
-
+            em.persist(magoCreado);
+            em.getTransaction().commit();
         } catch (Exception e) {
             System.out.println("Problemas crendo el mago");
-            tx.rollback();
+            
         }
     }
         /**
      * Crea un nuevo monstruo utilizando los valores proporcionados por la vista.
      * El monstruo es persistido en la base de datos usando Hibernate.
      */
-    public void crearMostruo() {
-        Session session = null;
+    // public void crearMostruo() {
+    //     Session session = null;
+    //     Monstruo monstruoCreado = vista.getValoresMonstruo();
+    //     Transaction tx = null;
+    //     try (SessionFactory factory = conn.getFactory()) {
+    //         session = factory.getCurrentSession();
+    //         tx = session.beginTransaction();
+    //         session.persist(monstruoCreado);
+    //         tx.commit();
+
+    //     } catch (Exception e) {
+    //         System.out.println("Problemas crendo el mago");
+    //         tx.rollback();
+    //     }
+    // }
+
+        public void crearMostruo() {
+       
         Monstruo monstruoCreado = vista.getValoresMonstruo();
-        Transaction tx = null;
-        try (SessionFactory factory = conn.getFactory()) {
-            session = factory.getCurrentSession();
-            tx = session.beginTransaction();
-            session.persist(monstruoCreado);
-            tx.commit();
+        EntityManager em = null;
+        try (EntityManagerFactory emf = mang.getEMF()) { 
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
+            em.persist(monstruoCreado);
+            em.getTransaction().commit();
 
         } catch (Exception e) {
-            System.out.println("Problemas crendo el mago");
-            tx.rollback();
+            System.out.println("Problemas creando el monstruo");
+
+            
         }
     }
+
 
     // public void ataqueMago() {
     // Session session = null;
