@@ -37,15 +37,13 @@ public class EmpleadoController {
     }
 
 
-    public void buscarEmpleados(int[] departamentos, int salario, String oficio){
+    public void buscarEmpleados(List<Integer> departamentos, int salario, String oficio){
            List<Bson> filters = new ArrayList<>();
 
     // Department filter
-    if (departamentos != null && departamentos.length > 0) {
-         List<Integer> deps = Arrays.stream(departamentos)
-                                   .boxed()
-                                   .toList();
-        filters.add(Filters.in("dep", deps));
+    if (departamentos != null && departamentos.size() > 0) {
+         
+        filters.add(Filters.in("dep", departamentos));
     }
 
     // Salary filter

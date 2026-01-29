@@ -2,6 +2,10 @@ package empresa;
 
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bson.Document;
 
 public class Main {
@@ -14,7 +18,7 @@ public static void main(String[] args) {
         // empleadoController.crearEmpleado("Maria Jesus", 20, 1500, "05/01/2005", "analista", 100);
         // empleadoController.crearEmpleado("Alberto", 20, 1100, "15/11/2001", null, 0);
         // empleadoController.crearEmpleado("Fernando", 30, 1400, "20/11/1999", "analista", 200);
-        empleadoController.buscarEmpleados(new int[]{}, 1300, "profesor");
+        empleadoController.buscarEmpleados(new ArrayList<Integer>(List.of(10,20)), 0, null);
 
     
     } catch (Exception e) {
